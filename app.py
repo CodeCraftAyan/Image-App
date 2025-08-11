@@ -17,9 +17,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-with app.app_context():
-    db.create_all()
-
 # Model
 class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -51,8 +48,9 @@ def index():
     photos = Photo.query.all()
     return render_template("index.html", photos=photos)
 
+# Create folders and tables
 if __name__ == "__main__":
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
     with app.app_context():
-        db.create_all()
+        db.create_all()  # now runs AFTER model definition
     app.run(debug=True)
