@@ -23,6 +23,11 @@ class Photo(db.Model):
     title = db.Column(db.String(150), nullable=False)
     filename = db.Column(db.String(150), nullable=False)
 
+# Ensure DB and upload folder exist — runs for both local & Render
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+with app.app_context():
+    db.create_all()
+
 # Helpers
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -48,9 +53,5 @@ def index():
     photos = Photo.query.all()
     return render_template("index.html", photos=photos)
 
-# Create folders and tables
 if __name__ == "__main__":
-    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-    with app.app_context():
-        db.create_all()  # now runs AFTER model definition
-    app.run(debug=True)
+    app.run()
