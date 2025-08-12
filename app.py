@@ -64,4 +64,4 @@ def i_view(i_title, i_id):
     return render_template("view.html", photo=photo)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
