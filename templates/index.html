@@ -1,41 +1,45 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-6xl mx-auto px-4">
-    <h1 class="text-4xl font-bold text-center mb-8 text-gray-100">Photo Gallery</h1>
 
-    <!-- Upload Form -->
-    <form method="POST" enctype="multipart/form-data" class="bg-gray-800 p-6 rounded-xl shadow-lg mb-8">
-        <div class="mb-4">
-            <label class="block text-gray-300 font-semibold mb-1">Image Title</label>
-            <input type="text" name="title" placeholder="Enter image title" required
-                class="w-full px-4 py-2 border border-gray-600 rounded-lg bg-gray-900 text-gray-100 focus:ring-2 focus:ring-blue-400 outline-none">
-        </div>
-        <div class="mb-4">
-            <label class="block text-gray-300 font-semibold mb-1">Upload Image</label>
-            <input type="file" name="file" accept="image/*" required
-                class="w-full px-4 py-2 border border-gray-600 rounded-lg bg-gray-900 text-gray-100 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-500 file:text-white hover:file:bg-blue-600">
-        </div>
-        <button type="submit"
-            class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold transition-all">
-            Upload
-        </button>
-    </form>
+<header class="text-white flex flex-wrap items-center gap-4 justify-between px-4 md:px-10 mb-6 md:mb-12">
+    <div>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-300">
+            Photo <span class="bg-gradient-to-r from-yellow-400 to-rose-500 text-transparent bg-clip-text">Gallery</span>
+        </h2>
+        <p class="text-gray-400 italic">An online spot where anyone can upload pictures</p>
+    </div>
+    <ul>
+        <li>
+            <a href="{{ url_for('create') }}" 
+               class="bg-indigo-500 text-white font-medium rounded py-2 px-5 shadow-md hover:bg-indigo-600 transition-colors duration-300">
+                + Create
+            </a>
+        </li>
+    </ul>
+</header>
 
+<hr class="hidden md:block mb-6 border-t-2 border-gray-700 mx-4 md:mx-10">
+
+<div class="px-4 md:px-10">
     <!-- Gallery -->
     {% if photos %}
     <div class="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-4">
         {% for photo in photos %}
-        <div class="relative mb-4 break-inside-avoid rounded-lg overflow-hidden shadow-lg bg-gray-800 transition-transform duration-300 hover:scale-105">
-            <img src="{{ url_for('static', filename='uploads/' + photo.filename) }}" alt="{{ photo.title }}"
-                class="w-full object-cover">
-            <div class="p-4">
-                <h2 class="text-lg font-semibold text-gray-100">{{ photo.title }}</h2>
+        <a href="{{ url_for('i_view', i_title=photo.title.replace(' ', '-'), i_id=photo.id) }}">
+            <div class="relative mb-4 break-inside-avoid rounded-lg overflow-hidden shadow-lg bg-gray-900 border border-gray-800 hover:border-indigo-500 transition duration-300 hover:scale-[1.03] cursor-pointer">
+                <img src="{{ url_for('static', filename='uploads/' + photo.filename) }}" 
+                    alt="{{ photo.title }}"
+                    class="w-full h-auto object-cover hover:opacity-90 transition-opacity duration-300">
+                <div class="p-4">
+                    <h2 class="text-lg font-semibold text-gray-200">{{ photo.title }}</h2>
+                </div>
             </div>
-        </div>
+        </a>
         {% endfor %}
     </div>
     {% else %}
-    <p class="text-center text-gray-400 mt-6">No images uploaded yet.</p>
+    <p class="text-center text-gray-500 mt-10 text-lg">No images uploaded yet.</p>
     {% endif %}
 </div>
+
 {% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ photo.title }}
+{% endblock %}
+
+{% block content %}
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden; /* Disable scrolling */
+    }
+</style>
+
+<div class="flex flex-col items-center justify-center h-screen bg-gray-900 relative">
+
+    <!-- Back Button -->
+    <a href="{{ url_for('index') }}" class="absolute top-2 left-4 bg-gray-700 text-white px-3 py-1 rounded hover:bg-gray-600 transition">
+        Go Back
+    </a>
+
+
+    <!-- Image -->
+    <img 
+        src="{{ url_for('static', filename='uploads/' + photo.filename) }}" 
+        alt="{{ photo.title }}" 
+        class="max-h-[75vh] w-auto object-contain rounded-2xl shadow-2xl"
+    >
+
+    <!-- Title & Actions -->
+    <div class="rounded-xl shadow-md text-center flex flex-col items-center gap-4 mt-4">
+        <h1 class="text-gray-400 text-2xl font-semibold tracking-wide">
+            #{{ photo.title }}
+        </h1>
+        <div class="flex justify-center gap-4">
+            <a href="{{ url_for('static', filename='uploads/' + photo.filename) }}" 
+            download="{{ photo.title }}{{ photo.filename[photo.filename.rfind('.'):] }}"
+            class="bg-rose-500 hover:bg-rose-600 text-white font-semibold py-2 px-5 rounded shadow-md transition-all">
+                Download
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -33,8 +33,13 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # Routes
-@app.route("/", methods=["GET", "POST"])
+@app.route("/")
 def index():
+    photos = Photo.query.all()
+    return render_template("index.html", photos=photos)
+
+@app.route("/create", methods=["GET", "POST"])
+def create():
     if request.method == "POST":
         title = request.form.get("title")
         file = request.files.get("file")
@@ -49,9 +54,14 @@ def index():
             db.session.commit()
 
         return redirect(url_for("index"))
+    return render_template("create.html")
 
-    photos = Photo.query.all()
-    return render_template("index.html", photos=photos)
+@app.route("/<string:i_title>/<int:i_id>")
+def i_view(i_title, i_id):
+    photo = Photo.query.get_or_404(i_id)
+    if photo.title.replace(" ", "-").lower() != i_title.lower():
+        return redirect(url_for("i_view", i_title=photo.title.replace(" ", "-"), i_id=photo.id))
+    return render_template("view.html", photo=photo)
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
